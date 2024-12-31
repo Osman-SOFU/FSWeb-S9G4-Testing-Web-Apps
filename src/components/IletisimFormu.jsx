@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Goruntule from './Goruntule';
 
 const formData = {
-  ad: "",
-  soyad: "",
-  email: "",
-  mesaj: ""
+  ad: '',
+  soyad: '',
+  email: '',
+  mesaj: '',
 };
 
 const errorData = {
-  ad: "",
-  soyad: "",
-  email: "",
-  mesaj: ""
+  ad: '',
+  soyad: '',
+  email: '',
+  mesaj: '',
 };
 
 const IletisimFormu = () => {
@@ -21,50 +21,52 @@ const IletisimFormu = () => {
   const [errors, setErrors] = useState(errorData);
 
   const errorHandling = (fieldName, fieldValue) => {
-    if (fieldName === "ad" && fieldValue.length < 5)
+    if (fieldName === 'ad' && fieldValue.length < 5)
       return `${fieldName} en az 5 karakter olmalıdır.`;
 
     const emailRegex = /(.*)@(.*)\.(.+)/g;
-    if (fieldName === "email" && !fieldValue.match(emailRegex))
+    if (fieldName === 'email' && !fieldValue.match(emailRegex))
       return `${fieldName} geçerli bir email adresi olmalıdır.`;
 
-    if (fieldName !== "mesaj" && fieldValue === "")
+    if (fieldName !== 'mesaj' && fieldValue === '')
       return `${fieldName} gereklidir.`;
 
-    return "";
+    return '';
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const submitErrors = {};
-    Object.keys(errors).forEach(field => {
+    Object.keys(errors).forEach((field) => {
       submitErrors[field] = errorHandling(field, form[field]);
     });
 
     setErrors(submitErrors);
 
-    const hasErrors = (submitErrors.ad === "" && submitErrors.soyad === "" && submitErrors.email === "" && submitErrors.mesaj === "");
+    const hasErrors =
+      submitErrors.ad === '' &&
+      submitErrors.soyad === '' &&
+      submitErrors.email === '' &&
+      submitErrors.mesaj === '';
     setDisplayData(hasErrors);
-
   };
 
   const handleChange = (e) => {
     const errorMessage = errorHandling(e.target.name, e.target.value);
 
-    if (errorMessage !== "") {
+    if (errorMessage !== '') {
       setDisplayData(false);
     }
 
     setErrors({
       ...errors,
-      [e.target.name]: errorMessage
+      [e.target.name]: errorMessage,
     });
 
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -79,9 +81,10 @@ const IletisimFormu = () => {
             name="ad"
             value={form.ad}
             id="ad"
-            placeholder="İlhan"
+            placeholder="Adınız"
+            data-testid="name-input"
           />
-          {(errors.ad) && <p data-testid="error">Hata: {errors.ad}</p>}
+          {errors.ad && <p data-testid="error">Hata: {errors.ad}</p>}
         </div>
 
         <div>
@@ -91,21 +94,23 @@ const IletisimFormu = () => {
             id="soyad"
             name="soyad"
             value={form.soyad}
-            placeholder="Mansız"
+            placeholder="Soyadınız"
+            data-testid="lastName-input"
           />
-          {(errors.soyad) && <p data-testid="error">Hata: {errors.soyad}</p>}
+          {errors.soyad && <p data-testid="error">Hata: {errors.soyad}</p>}
         </div>
 
         <div>
-          <label htmlFor="email">Email*</label>
+          <label htmlFor="email">E-mail*</label>
           <input
             onChange={handleChange}
             id="email"
             name="email"
             value={form.email}
-            placeholder="yüzyılıngolcüsü@hotmail.com"
+            placeholder="E-mail adresiniz"
+            data-testid="email-input"
           />
-          {(errors.email) && <p data-testid="error">Hata: {errors.email}</p>}
+          {errors.email && <p data-testid="error">Hata: {errors.email}</p>}
         </div>
 
         <div>
@@ -115,13 +120,17 @@ const IletisimFormu = () => {
             name="mesaj"
             id="mesaj"
             value={form.mesaj}
+            placeholder="Mesajınız (isteğe bağlı)"
+            data-testid="message-input"
           />
-          {(errors.mesaj) && <p data-testid="error">Error: {errors.mesaj}</p>}
+          {errors.mesaj && <p data-testid="error">Error: {errors.mesaj}</p>}
         </div>
 
-        {displayData && <Goruntule form={form}/>}
+        {displayData && <Goruntule form={form} />}
 
-        <button>Gönder</button>
+        <button type="submit" data-testid="submit-button">
+          Gönder
+        </button>
       </form>
     </div>
   );
